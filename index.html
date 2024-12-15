@@ -1,0 +1,712 @@
+    <!DOCTYPE html>
+    <html lang="pt-br">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="shortcut icon" href="./assistente-virtual.png" type="image/x-icon">
+        <meta name="description" content="TechBot: seu assistente virtual inteligente, especializado em soluções tecnológicas inovadoras.">
+        <title>TechBot | Assistente Virtual</title>
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Stylish&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Updock&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=DM+Serif+Text:ital@0;1&display=swap');
+
+            body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #7d5bff, #be589c, #150222, #2e003e);
+            background-size: 400% 400%;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;  
+            flex-direction: column;
+            color: #fff;
+            overflow: hidden;
+            animation: gradientAnimation 10s ease-in-out infinite;
+            }
+
+            @keyframes gradientAnimation {
+            0% {
+            background-position: 0% 50%;
+                }
+            50% {
+            background-position: 100% 50%;
+                }
+            100% {
+            background-position: 0% 50%;
+                }
+            }
+
+            h1 {
+            font-size: 2.5em;
+            text-align: center;
+            color: #ff66cc;
+            font-family: "Stylish", Arial, sans-serif;
+            margin: 20px 0;
+            text-shadow: 0px 0px 10px rgba(200, 0, 150, 0.8);
+            cursor: context-menu;
+            transition: color 2s ease, transform 0.5s ease;
+            filter: drop-shadow(0px 5px 10px #150222);
+            }
+
+        
+
+            @keyframes typing  {
+            0% {
+            transform: translateY(-100%);
+            opacity: 0;
+                }
+            50% {
+            opacity: 1;
+                }
+            100% {
+            transform: translateY(0);
+                }
+            }
+
+            .btn-interagir span {
+            overflow: hidden;
+            white-space: nowrap;
+            width: 0;
+            animation: typing 7s steps(20, end) forwards;
+            }   
+
+            .btn-interagir:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(125, 91, 255, 1);
+            background: linear-gradient(135deg, #7d5bff, rgb(255, 102, 204));
+            }
+
+            .btn-interagir {
+            position: relative;
+            display: inline-block;
+            padding: 15px 30px;
+            font-size: 18px;
+            font-weight: bold;
+            color: #fff;
+            background: linear-gradient(135deg, #9b88e7, #c4238e);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            box-shadow: 0 4px 15px rgba(52, 152, 219, 0.5);
+            }
+
+            .btn-interagir::before,
+            .btn-interagir::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgb(241, 108, 197);
+            transform: skewX(-45deg);
+            transition: all 1.3s ease;
+            pointer-events: none;
+            opacity: 0;
+            }
+
+            .btn-interagir::after {
+            top: auto;
+            bottom: 0;
+            left: 100%;
+            background: rgb(135, 107, 247);
+            }
+
+            .btn-interagir:hover::before {
+            left: 100%;
+            opacity: 1; 
+            }
+
+            .btn-interagir:hover::after {
+            left: -100%;
+            opacity: 1; 
+            }
+
+
+            .btn-interagir:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(52, 152, 219, 0.8);
+            }
+
+            .chat-container {
+            position: fixed;
+            bottom: 15px;
+            right: -100%; 
+            width: 100%;
+            max-width: 400px;
+            height: 550px;
+            background: #222;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.8);
+            transform: translateY(100%);
+            opacity: 0;
+            transition: transform 1.5s, opacity 2.5s ease-out;
+            display: flex;
+            flex-direction: column;
+            color: #fff;
+            z-index: 20;
+            }
+
+            .chat-container.fade-out {
+            opacity: 0;     
+            }
+
+            .chat-container.show {
+            transform: translateY(0);
+            opacity: 1;
+            right: 15px; 
+            opacity: 1;
+            }
+
+            .chat-container.hide {
+            transform: rotateY(180deg) translateY(100%);
+            opacity: 0;
+            transition: transform 1.3s ease, opacity 0.9s;
+            }
+
+            .chat-header {
+            background: linear-gradient(135deg, #ff66cc, #7d5bff);
+            padding: 15px;
+            color: #fff;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            border-radius: 12px 12px 0 0;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            }
+
+            .chat-header .status {
+            font-size: 0.9em;
+            font-weight: normal;
+            color: #d4ffdf;
+            margin-top: 5px;
+            font-family: "Stylish", Arial, sans-serif;
+            cursor: context-menu;
+            }
+
+            .status-icon {
+            width: 7px;
+            height: 7px;
+            background-color: #28a745;
+            border-radius: 50%;
+            display: inline-block;
+            border: 2px solid #ffffff;
+            box-shadow: 0 0 5px rgba(0, 255, 0, 0.5),
+                            0 0 10px rgba(0, 255, 0, 0.4);
+            margin-right: 4px;
+            position: relative;
+            font-family: "Poppins", Arial, Helvetica, sans-serif;
+            }
+
+            .status-icon::after {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 50%;
+            box-shadow: 0 0 15px rgba(0, 255, 0, 0.6);
+            opacity: 0.5;
+            }
+
+            .btn-fechar-chat, .btn-recarregar-chat {
+            font-size: 18px;
+            background: none;
+            border: none;
+            color: #fff;
+            cursor: pointer;
+            }
+
+            .btn-recarregar-chat {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            }
+
+            .btn-fechar-chat {
+            position: absolute;
+            right: 15px;
+            top: 15px;
+            }
+
+            iframe {
+            flex: 1;
+            border: none;
+            width: 100%;
+            height: 100%;
+            }
+
+            .chat-footer {
+            padding: 10px;
+            background: linear-gradient(135deg, #ff66cc, #7d5bff);
+            text-align: center;
+            font-size: 0.2em;
+            color: #ffffff;
+            border-radius: 0 0 12px 12px;
+            font-family: "DM Serif Text", Arial, sans-serif;
+            cursor: context-menu;
+            }
+
+            .TechBot {
+            font-family: "Poppins", Arial, sans-serif;
+            cursor: context-menu;
+            font-size: 16px;
+            }
+
+            @media (max-width: 1024px) {
+            h1 {
+            font-size: 2.2em;
+            margin: 20px 0;
+                }
+
+            .btn-interagir {
+            font-size: 1.3em;
+            padding: 12px 25px;
+                }
+
+            .chat-container {
+            bottom: 20px;
+            right: 20px;
+            max-width: 90%;
+            height: 500px;
+                }
+
+            .chat-header, .chat-footer {
+            font-size: 1.2em;
+            padding: 12px;
+                }
+            }
+
+            @media (max-width: 768px) {
+            h1 {
+            font-size: 2em;
+            margin: 15px 0;
+                }
+
+            .btn-interagir {
+            font-size: 1.4em;
+            padding: 10px 20px;
+                }
+
+            .chat-container {
+            bottom: 10px;
+            right: 10px;
+            max-width: 90%;
+            height: 450px;
+                }
+
+            .chat-header, .chat-footer {
+            font-size: 1.2em;
+            padding: 10px;
+                }
+            }
+
+            @media (max-width: 480px) {
+            h1 {
+            font-size: 1.8em;
+                }
+
+            .btn-interagir {
+            font-size: 1em;
+            padding: 8px 15px;
+                }
+
+            .chat-container {
+            max-width: 95%;
+            height: 400px;
+                }
+
+            .chat-header, .chat-footer {
+            font-size: 1.2em;
+            padding: 8px;
+                }
+            }
+
+            @media (max-width: 320px) {
+            h1 {
+            font-size: 1.5em;
+                }
+
+            .btn-interagir {
+            font-size: 1.4em;
+            padding: 7px 12px;
+                }
+
+            .chat-header, .chat-footer {
+            font-size: 0.65em;
+            padding: 7px;
+                }
+
+            .chat-container {
+                    height: 350px;
+                }
+            }
+
+            @media (min-width: 1440px) {
+            h1 {
+            font-size: 3em;
+                }
+
+            .btn-interagir {
+            font-size: 1.6em;
+            padding: 20px 40px;
+                }
+
+            .chat-container {
+            max-width: 500px;
+            height: 600px;
+                }
+
+            .chat-header, .chat-footer {
+            font-size: 1em;
+            padding: 15px;
+                }
+            }
+
+            @media (min-width: 1024px) {
+            h1 {
+            font-size: 2.5em;
+                }
+
+            .btn-interagir {
+            font-size: 1.4em;
+                }
+
+            .chat-container {
+            max-width: 400px;
+            height: 550px;
+                }
+
+            .chat-header, .chat-footer {
+            font-size: 1.1em;
+            padding: 12px;
+                }
+            .btn-formulario.show {
+            right: 0px; 
+            top: 94%;
+                }
+
+            }
+
+            .btn-recarregar-chat.loading {
+            animation: spin 1s linear infinite;
+            }
+
+            @keyframes spin {
+            0% {
+            transform: rotate(0deg);
+                }
+            100% {
+            transform: rotate(360deg);
+                }
+            }
+
+            .move-up {
+            transform: translateY(-285px);
+            }
+
+            .btn-hidden {
+            display: none;
+            }
+        
+            @keyframes fadeOutShrink {
+            0% {
+            opacity: 1;
+            transform: scale(1);
+                }
+            100% {
+            opacity: 0;
+            transform: scale(0.4);
+                }
+            }
+
+            .btn-formulario {
+            background: linear-gradient(135deg, #ff66cc, #7d5bff);
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 1.2em;
+            color: #fff;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.8);
+            transition: transform 0.3s ease, box-shadow 0.3s ease, left 0.5s ease;
+            position: fixed;
+            top: 90%;
+            right: 90%;  
+            left:0%;   
+            transform: translateY(-50%);
+            display: block;
+            z-index: 25;
+            text-decoration: none;
+            font-family: "Poppins",Arial, sans-serif;
+            visibility: hidden; 
+            }
+
+            .btn-formulario.show {
+            visibility: visible; 
+            left: 35px;     
+            right: auto; 
+            }
+
+            .btn-formulario:hover {
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 0 30px rgba(125, 91, 255, 1);
+            background: linear-gradient(135deg, #7d5bff, #ff66cc);
+            }
+
+            .status-icon.offline {
+            background-color: #ff4c4c; 
+            box-shadow: 0 0 5px rgba(255, 0, 0, 0.5), 0 0 10px rgba(255, 0, 0, 0.4);
+        }
+
+        .welcome-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .welcome-message {
+            font-size: 3em;
+            opacity: 0;
+            animation: fadeIn 3s ease forwards, fadeOut 3s ease 4s forwards;
+            background: linear-gradient(135deg, #2a039e, #f846ba, #921fc0, #e921a3, #7c275e);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: context-menu;
+        }
+
+        .logo {
+            font-size: 1.3em;
+            margin-top: 7px;
+            opacity: 0;
+            animation: fadeIn 3s ease forwards, fadeOut 3s ease 4s forwards;
+            background: linear-gradient(135deg, #2a039e, #f846ba, #921fc0, #e921a3, #7c275e);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            cursor: context-menu;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: scale(0.8); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: scale(1); }
+            100% { opacity: 0; transform: scale(1.2); }
+        }
+
+        #main-content {
+            display: none;
+        }
+
+        #main-content.active {
+            display: block;
+            opacity: 0;
+            animation: fadeInContent 2s ease forwards;
+        }
+
+        @keyframes fadeInContent {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+        
+        </style>
+    </head>
+
+    <body>
+        
+        <div style="position: relative; display: inline-block; ">
+            <h1 id="header-title"></h1>
+        </div>
+        <button class="btn-interagir" id="btnInteragir"><span> Falar com o TechBot 🗯️ </span></button>
+        <div class="chat-container" id="chatContainer">
+            <div class="chat-header">
+                <button id="btnRecarregarChat" class="btn-recarregar-chat">⟳</button>
+                <div style="display: flex; align-items: center;">
+                    <div class="TechBot">TechBot</div>
+                </div>
+                <span class="status"><div class="status-icon"></div><span id="onlineStatus">Online</span></span>
+                <button id="btnFecharChat" class="btn-fechar-chat">&times;</button>
+            </div>
+            <iframe id="chatIframe" src="https://console.dialogflow.com/api-client/demo/embedded/ade4c861-65ac-4627-acdc-c45bec276b74" allow="microphone;"></iframe>
+            <div class="chat-footer">
+                © 2024 TechBot - Todos os direitos reservados.
+            </div>
+        </div>
+    <a href="https://forms.gle/Z7xyeXotcf5BeKDP8" class="btn-formulario" id="btnFormulario" target="_blank">Formulário de avaliação do TechBot 🚀💻</a>
+
+        <script>
+            const titleText = "Bem-vindo ao TechBot, seu assistente virtual de tecnologia!";
+            const baseText = "Bem-vindo ao TechBot, "; 
+            const newText = "seu amigo virtual de tecnologia!";
+            const secondText = "seu assistente virtual de tecnologia!";
+            const headerTitle = document.querySelector('#header-title');
+            const colors = ["#9b88e7", "#be589c"];  
+
+
+            let currentIndex = 0; 
+            let newIndex = 0; 
+            let secondIndex = 0; 
+            let phase = 1; 
+
+            function typeText(text, callback) {
+            if ((phase === 1 && currentIndex < text.length) ||
+            (phase === 2 && newIndex < text.length) ||
+            (phase === 3 && secondIndex < text.length)) {
+
+            const charIndex = phase === 1 ? currentIndex++ : (phase === 2 ? newIndex++ : secondIndex++);
+            headerTitle.textContent += text[charIndex];
+            setTimeout(() => typeText(text, callback), 68);
+            } else {
+            setTimeout(callback, 1000); 
+            }
+            }
+
+
+            function eraseTextToBase(callback) {
+            if (headerTitle.textContent !== baseText) {
+            headerTitle.textContent = headerTitle.textContent.slice(0, -1);
+            setTimeout(() => eraseTextToBase(callback), 50);
+            } else {
+            setTimeout(callback, 500);
+            }   
+            }
+
+
+            function runCycle() {
+            if (phase === 1) {
+            
+            typeText(titleText, () => {
+                eraseTextToBase(() => {
+                    phase = 2; 
+                    runCycle();
+                });
+            });
+            } else if (phase === 2) {
+        
+            typeText(newText, () => {
+                eraseTextToBase(() => {
+                    phase = 3; 
+                    runCycle();
+                });
+            });
+            } else if (phase === 3) {
+        
+            typeText(secondText, () => {
+                eraseTextToBase(() => {
+                    phase = 2; 
+                    newIndex = 0;
+                    secondIndex = 0;
+                    runCycle();
+            });
+            });
+            }
+            }
+
+            function changeTitleColor() {
+            let colorIndex = 0;
+            setInterval(() => {
+            headerTitle.style.color = colors[colorIndex];
+            colorIndex = (colorIndex + 1) % colors.length;
+            }, 2500);
+            }
+
+
+            window.onload = function () {
+            runCycle(); 
+            changeTitleColor(); 
+            };
+
+            const btnInteragir = document.getElementById("btnInteragir");
+            const chatContainer = document.getElementById("chatContainer");
+            const btnFecharChat = document.getElementById("btnFecharChat");
+            const btnRecarregarChat = document.getElementById("btnRecarregarChat");
+            const chatIframe = document.getElementById("chatIframe");
+
+            btnInteragir.addEventListener("click", () => {
+            chatContainer.classList.toggle("show");
+            headerTitle.classList.add("move-up");
+            btnInteragir.classList.add("btn-hidden");
+            });
+
+            btnFecharChat.addEventListener("click", () => {
+            chatContainer.classList.add("hide");
+            headerTitle.classList.remove("move-up");
+            btnFormulario.classList.remove("show");  
+            setTimeout(() => {
+            chatContainer.classList.remove("show", "hide"); 
+            btnInteragir.classList.remove("btn-hidden");
+            }, 500); 
+            });
+
+            btnRecarregarChat.addEventListener("click", () => {
+            chatIframe.src = chatIframe.src;
+            });
+
+            btnRecarregarChat.addEventListener("click", () => {
+            btnRecarregarChat.classList.add("loading"); 
+            chatIframe.src = chatIframe.src; 
+
+            setTimeout(() => {
+            btnRecarregarChat.classList.remove("loading");
+            }, 1000); 
+            });
+
+            let letters = document.querySelectorAll('#btnInteragir span');
+            letters.forEach((letter, index) => {
+            letter.style.animationDelay = `${index * 100}ms`; 
+            letter.classList.add('fall');
+            });
+            
+            btnInteragir.addEventListener("click", () => {
+            btnInteragir.classList.add("btn-hidden"); 
+            btnFormulario.classList.add("btn-hidden"); 
+
+            setTimeout(() => {
+            chatContainer.classList.add("show"); 
+            headerTitle.classList.add("move-up"); 
+            btnFormulario.classList.add("show"); 
+            }, 500);
+            });
+
+            setTimeout(() => {
+            btnFormulario.classList.remove("show");
+            btnFormulario.classList.add("btn-hidden"); 
+            btnInteragir.classList.remove("btn-hidden"); 
+            }, 500);
+
+            const onlineStatus = document.getElementById('onlineStatus');
+
+            window.addEventListener('load', updateConnectionStatus);
+
+            window.addEventListener('online', updateConnectionStatus);
+            window.addEventListener('offline', updateConnectionStatus);
+
+            function updateConnectionStatus() {
+            if (navigator.onLine) {
+            onlineStatus.textContent = "Online";
+            onlineStatus.style.color = "#d4ffdf"; 
+            document.querySelector('.status-icon').classList.remove('offline'); 
+            } else {
+            onlineStatus.textContent = "Offline";
+            onlineStatus.style.color = "#ff4c4c"; 
+            document.querySelector('.status-icon').classList.add('offline'); 
+            }
+    }
+    </script>
+
+    </body>
+    </html>

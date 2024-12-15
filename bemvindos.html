@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Bem-vindo ao TechBot! Um assistente virtual de tecnologia.">
+    <link rel="shortcut icon" href="./assistente-virtual.png" type="image/x-icon">
+    <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@300;400;700&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Updock&display=swap" rel="stylesheet">
+
+    <title>Bem-vindo | TechBot</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #5a3eca, #f5addd, #150222, #2e003e);
+            background-size: 400% 400%;
+            animation: gradientAnimation 17s ease-in-out infinite;
+            font-family:"Poppins", 'Arial', sans-serif;
+            overflow: hidden;
+            color: #fff;
+        }
+
+        @keyframes gradientAnimation {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .welcome-message {
+            font-size: 3em;
+            text-align: center;
+            opacity: 1;
+            background: linear-gradient(135deg, #230e64, #f55bbf, #b41bf0, #fa03a4, #5e1f48);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            font-family:"Poppins", 'Arial', sans-serif;
+            -webkit-text-fill-color: transparent;
+            cursor: context-menu;
+        }
+
+        .logo {
+            font-size: 1.3em;       
+            margin-top: 7px;
+            opacity: 0;
+            background: linear-gradient(135deg, #230e64, #f55bbf, #b41bf0, #fa03a4, #5e1f48);
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;   
+            font-family:"Poppins", 'Arial', sans-serif;
+            cursor: context-menu;
+            text-align: center;
+        }
+
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            100% {  
+                opacity: 1;
+                transform: scale(1);    
+            }
+        }
+
+        @keyframes fadeOut {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(1.2);
+            }   
+        }
+
+        #headerTitle{
+            text-align: center;
+        }
+
+        #logoText{
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <div class="welcome-message" id="headerTitle" aria-label="Bem-vindo ao TechBot!">Seja Bem-vindo ao TechBot!</div>
+        <div class="logo" id="logoText">Aguarde enquanto carregamos sua experiência.</div>
+    </div>
+    
+    <script>
+        const topPhrases = [
+            "O futuro da tecnologia está aqui!",
+            "Processo concluído com sucesso!",
+            "Prepare-se para uma experiência única!"
+        ];
+    
+        const bottomPhrases = [
+            "Carregando sua jornada virtual...",
+            "Sua jornada começa agora!",
+            "Estamos quase lá..."
+        ];
+    
+        const headerTitle = document.getElementById("headerTitle");
+        const logoText = document.getElementById("logoText");
+        let currentTopPhrase = 0;
+        let currentBottomPhrase = 0;
+        let intervalId;
+    
+        function changeText() {
+
+            headerTitle.style.animation = "fadeOut 2s ease-in-out forwards";
+            logoText.style.animation = "fadeOut 2s ease-in-out forwards";
+    
+            setTimeout(() => {
+        
+                headerTitle.textContent = topPhrases[currentTopPhrase];
+                logoText.textContent = bottomPhrases[currentBottomPhrase];
+    
+                headerTitle.style.animation = "fadeIn 1s ease-in-out forwards";
+                logoText.style.animation = "fadeIn 1s ease-in-out forwards";
+    
+                currentTopPhrase = (currentTopPhrase + 1) % topPhrases.length;
+                currentBottomPhrase = (currentBottomPhrase + 1) % bottomPhrases.length;
+    
+                if (currentTopPhrase === 0 && currentBottomPhrase === 0) {
+                    clearInterval(intervalId);
+    
+                    headerTitle.style.animation = "fadeOut 2s ease-in-out forwards";
+                    logoText.style.animation = "fadeOut 2s ease-in-out forwards";
+    
+                    setTimeout(() => {
+                        window.location.href = "pag/index.html";  
+                    }, 0); 
+                }
+            }, 2000); 
+        }
+    
+        window.onload = () => {
+      
+            headerTitle.style.animation = "fadeIn 1s ease-in-out forwards";
+            logoText.style.animation = "fadeIn 1s ease-in-out forwards";
+            headerTitle.style.opacity = 1;
+            logoText.style.opacity = 1;
+        };
+    
+        intervalId = setInterval(changeText, 5000); 
+    </script>
+    
+</body>
+</html>
